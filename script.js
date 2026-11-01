@@ -49,6 +49,20 @@ const videoLinks = [
     "video3.mp4"
 ];
 
+// FINAL 10 PHOTO CAPTIONS
+const captions = [
+    "The Woman Behind His Smile 🤍",
+    "Friends by Chance, Brothers by Choice 💋🫂",
+    "Little Us, Big Memories 😙",
+    "Just Him, Just Perfect 💙😋",
+    "❤️🫂",
+    "His Forever Guide 💞",
+    "A Picture Full of Love 🫶🏻",
+    "Better Together, Always! 😌",
+    "A Frame Full of Happiness 🥹",
+    "💙"
+];
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const photoWall = document.getElementById("photoWall");
@@ -97,10 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
         img.alt = "Sudhan birthday memory";
         img.loading = "lazy";
 
+        // INDIVIDUAL PHOTO CAPTION
         const caption = document.createElement("span");
-        caption.textContent = index % 2 === 0
-            ? "A special memory 💙"
-            : "Stay happy ♡";
+        caption.textContent = captions[index];
 
         card.appendChild(img);
         card.appendChild(caption);
@@ -121,10 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.controls = true;
         video.playsInline = true;
         video.preload = "none";
-
-        // Keep the video path relative to the website root
         video.src = `./${link}`;
-
         video.setAttribute("controlsList", "nodownload");
 
         videoGallery.appendChild(video);
@@ -136,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
         welcomeScreen.style.display = "none";
         surpriseContent.style.display = "block";
 
-        // Load videos when the surprise screen becomes visible
+        // LOAD VIDEOS WHEN SURPRISE SCREEN OPENS
         videoGallery.querySelectorAll("video").forEach((video) => {
             video.load();
         });
@@ -185,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         surpriseContent.style.display = "none";
         welcomeScreen.style.display = "flex";
 
-        // Pause videos when going back
+        // PAUSE VIDEOS
         videoGallery.querySelectorAll("video").forEach((video) => {
             video.pause();
         });
