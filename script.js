@@ -52,14 +52,14 @@ const videoLinks = [
 // FINAL 10 PHOTO CAPTIONS
 const captions = [
     "The Woman Behind His Smile 🤍",
-    "Friends by Chance, Brothers by Choice 💋🫂",
-    "Little Us, Big Memories 😙",
-    "Just Him, Just Perfect 💙😋",
+    "💋🫂",
+    "Little Us😙",
+    "Just Him Just Perfect 💙😋",
     "❤️🫂",
     "His Forever Guide 💞",
     "A Picture Full of Love 🫶🏻",
-    "Better Together, Always! 😌",
-    "A Frame Full of Happiness 🥹",
+    "Better Together Always! 😌",
+    "A Frame Full of Happiness🥹",
     "💙"
 ];
 
