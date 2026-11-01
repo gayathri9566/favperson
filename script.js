@@ -52,10 +52,10 @@ const videoLinks = [
 const captions = [
     "The Woman Behind His Smile 🤍",
     "💋🫂",
-    "Little Us😙",
+    "Mini version of him😙",
     "Just Him Just Perfect 💙😋",
     "❤️🫂",
-    "His Forever Guide 💞",
+    "Appa💞",
     "A Picture Full of Love 🫶🏻",
     "Better Together Always! 😌",
     "A Frame Full of Happiness🥹",
