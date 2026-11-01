@@ -65,7 +65,7 @@ const captions = [
 
 // NANBAN FRIENDSHIP BGM
 const friendshipBgm = new Audio("./friendship-bgm.mp3");
-friendshipBgm.loop = true;
+friendshipBgm.loop = false;
 friendshipBgm.volume = 0.65;
 friendshipBgm.preload = "auto";
 
@@ -145,10 +145,12 @@ document.addEventListener("DOMContentLoaded", () => {
         videoGallery.appendChild(video);
     });
 
-    // PLAY BGM FROM 00:53
+    // PLAY BGM FROM 00:52
     async function playFriendshipBgm() {
 
         try {
+            friendshipBgm.pause();
+
             if (friendshipBgm.readyState < 1) {
                 await new Promise((resolve, reject) => {
                     friendshipBgm.addEventListener("loadedmetadata", resolve, { once: true });
@@ -157,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
 
-            friendshipBgm.currentTime = 53;
+            friendshipBgm.currentTime = 52;
             await friendshipBgm.play();
 
         } catch (error) {
@@ -165,10 +167,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // STOP BGM AT 01:18
+    friendshipBgm.addEventListener("timeupdate", () => {
+
+        if (friendshipBgm.currentTime >= 78) {
+            friendshipBgm.pause();
+            friendshipBgm.currentTime = 52;
+        }
+    });
+
     // STOP BGM
     function stopFriendshipBgm() {
         friendshipBgm.pause();
-        friendshipBgm.currentTime = 53;
+        friendshipBgm.currentTime = 52;
     }
 
     // OPEN SURPRISE SCREEN
@@ -186,7 +197,6 @@ document.addEventListener("DOMContentLoaded", () => {
         readMessageButton.style.display = "inline-block";
 
         surpriseContent.classList.remove("play-animations");
-
         void surpriseContent.offsetWidth;
 
         surpriseContent.classList.add("play-animations");
@@ -204,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageCard.classList.add("show");
         readMessageButton.style.display = "none";
 
-        // START NANBAN BGM FROM 00:53
+        // START NANBAN BGM FROM 00:52
         playFriendshipBgm();
 
         setTimeout(() => {
@@ -224,7 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
         messageCard.style.display = "none";
 
         readMessageButton.style.display = "inline-block";
-
         surpriseContent.style.display = "none";
         welcomeScreen.style.display = "flex";
 
