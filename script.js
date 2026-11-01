@@ -48,6 +48,7 @@ const videoLinks = [
     "video2.mp4",
     "video3.mp4"
 ];
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const photoWall = document.getElementById("photoWall");
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const messageCard = document.getElementById("messageCard");
     const backButton = document.getElementById("backButton");
 
-    // ORIGINAL 41 BACKGROUND PHOTOS
+    // BACKGROUND PHOTOS
     photoIds.forEach((id) => {
         const img = document.createElement("img");
 
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         photoWall.appendChild(img);
     });
 
-    // NEW 10 SCRAPBOOK PHOTOS
+    // SCRAPBOOK PHOTOS
     const scrapbookPhotos = [
         "Bg1.jpeg",
         "Bg2.jpeg",
@@ -111,16 +112,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // LOAD THREE VIDEOS
+    // CREATE THREE VIDEOS
     videoLinks.forEach((link) => {
 
         const video = document.createElement("video");
 
-        video.src = link;
         video.className = "video-frame";
         video.controls = true;
         video.playsInline = true;
-        video.preload = "metadata";
+        video.preload = "none";
+
+        // Keep the video path relative to the website root
+        video.src = `./${link}`;
+
+        video.setAttribute("controlsList", "nodownload");
 
         videoGallery.appendChild(video);
     });
@@ -130,6 +135,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         welcomeScreen.style.display = "none";
         surpriseContent.style.display = "block";
+
+        // Load videos when the surprise screen becomes visible
+        videoGallery.querySelectorAll("video").forEach((video) => {
+            video.load();
+        });
 
         messageCard.classList.remove("show");
         messageCard.style.display = "none";
@@ -160,7 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 block: "start"
             });
         }, 300);
-
     });
 
     // BACK TO WELCOME SCREEN
@@ -175,6 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         surpriseContent.style.display = "none";
         welcomeScreen.style.display = "flex";
+
+        // Pause videos when going back
+        videoGallery.querySelectorAll("video").forEach((video) => {
+            video.pause();
+        });
 
         window.scrollTo(0, 0);
     });
