@@ -62,11 +62,12 @@ const captions = [
     "💙"
 ];
 
-// FRIENDSHIP BGM
-const friendshipBgm = new Audio("./friendship-bgm.mp4");
+// FRIENDSHIP BGM - MP3
+const friendshipBgm = new Audio("./friendship-bgm.mp3");
+
+friendshipBgm.preload = "auto";
 friendshipBgm.loop = false;
 friendshipBgm.volume = 0.65;
-friendshipBgm.preload = "auto";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -145,67 +146,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // PLAY BGM FROM 01:19
-    async function playFriendshipBgm() {
+    function playFriendshipBgm() {
 
-        try {
-            friendshipBgm.pause();
+        friendshipBgm.pause();
 
-            // Wait for audio metadata
-            if (friendshipBgm.readyState < 1) {
-                await new Promise((resolve, reject) => {
+        // Set starting time to 79 seconds
+        friendshipBgm.currentTime = 79;
 
-                    friendshipBgm.addEventListener(
-                        "loadedmetadata",
-                        resolve,
-                        { once: true }
-                    );
+        // Play directly from the button click
+        const playPromise = friendshipBgm.play();
 
-                    friendshipBgm.addEventListener(
-                        "error",
-                        () => reject(friendshipBgm.error),
-                        { once: true }
-                    );
-
-                    friendshipBgm.load();
-                });
-            }
-
-            // Check whether the audio is long enough
-            if (friendshipBgm.duration <= 79) {
-                throw new Error("BGM duration is less than 01:19");
-            }
-
-            // Seek to 01:19 and wait for seek completion
-            await new Promise((resolve, reject) => {
-
-                const onSeeked = () => {
-                    cleanup();
-                    resolve();
-                };
-
-                const onError = () => {
-                    cleanup();
-                    reject(friendshipBgm.error);
-                };
-
-                const cleanup = () => {
-                    friendshipBgm.removeEventListener("seeked", onSeeked);
-                    friendshipBgm.removeEventListener("error", onError);
-                };
-
-                friendshipBgm.addEventListener("seeked", onSeeked);
-                friendshipBgm.addEventListener("error", onError);
-
-                friendshipBgm.currentTime = 79;
+        if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+                console.error("Friendship BGM playback error:", error);
             });
-
-            // Start playback
-            await friendshipBgm.play();
-
-            console.log("Friendship BGM started at 01:19");
-
-        } catch (error) {
-            console.error("Friendship BGM error:", error);
         }
     }
 
@@ -248,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageCard.classList.add("show");
         readMessageButton.style.display = "none";
 
-        // START BGM FROM 01:19
+        // PLAY FROM 01:19
         playFriendshipBgm();
 
         setTimeout(() => {
@@ -262,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // BACK TO WELCOME SCREEN
     backButton.addEventListener("click", () => {
 
-        // Stop BGM immediately
+        // STOP BGM
         stopFriendshipBgm();
 
         surpriseContent.classList.remove("play-animations");
@@ -274,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         surpriseContent.style.display = "none";
         welcomeScreen.style.display = "flex";
 
-        // Pause all videos
+        // PAUSE ALL VIDEOS
         videoGallery.querySelectorAll("video").forEach((video) => {
             video.pause();
         });
