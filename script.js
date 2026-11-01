@@ -49,22 +49,21 @@ const videoLinks = [
     "video3.mp4"
 ];
 
-// PHOTO CAPTIONS
 const captions = [
     "The Woman Behind His Smile 🤍",
-    "💋🫂",
-    "Little Us😙",
-    "Just Him Just Perfect 💙😋",
+    "Friends by Chance, Brothers by Choice 💋🫂",
+    "Little Us, Big Memories 😙",
+    "Just Him, Just Perfect 💙😋",
     "❤️🫂",
     "His Forever Guide 💞",
     "A Picture Full of Love 🫶🏻",
-    "Better Together Always! 😌",
+    "Better Together, Always! 😌",
     "A Frame Full of Happiness🥹",
     "💙"
 ];
 
-// NANBAN FRIENDSHIP BGM
-const friendshipBgm = new Audio("./friendship-bgm.mp3");
+// FRIENDSHIP BGM
+const friendshipBgm = new Audio("./friendship-bgm.mp4");
 friendshipBgm.loop = false;
 friendshipBgm.volume = 0.65;
 friendshipBgm.preload = "auto";
@@ -114,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const img = document.createElement("img");
         img.src = filename;
-        img.alt = "Sudhan birthday memory";
+        img.alt = "Birthday memory";
         img.loading = "lazy";
 
         const caption = document.createElement("span");
@@ -130,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // CREATE THREE VIDEOS
+    // CREATE VIDEOS
     videoLinks.forEach((link) => {
 
         const video = document.createElement("video");
@@ -145,21 +144,32 @@ document.addEventListener("DOMContentLoaded", () => {
         videoGallery.appendChild(video);
     });
 
-    // PLAY BGM FROM 00:52
+    // PLAY BGM FROM 01:19
     async function playFriendshipBgm() {
 
         try {
             friendshipBgm.pause();
 
+            // Wait until audio metadata is loaded
             if (friendshipBgm.readyState < 1) {
                 await new Promise((resolve, reject) => {
-                    friendshipBgm.addEventListener("loadedmetadata", resolve, { once: true });
-                    friendshipBgm.addEventListener("error", reject, { once: true });
+                    friendshipBgm.addEventListener(
+                        "loadedmetadata",
+                        resolve,
+                        { once: true }
+                    );
+
+                    friendshipBgm.addEventListener(
+                        "error",
+                        reject,
+                        { once: true }
+                    );
+
                     friendshipBgm.load();
                 });
             }
 
-            friendshipBgm.currentTime = 52;
+            friendshipBgm.currentTime = 79;
             await friendshipBgm.play();
 
         } catch (error) {
@@ -167,19 +177,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // STOP BGM AT 01:18
-    friendshipBgm.addEventListener("timeupdate", () => {
-
-        if (friendshipBgm.currentTime >= 78) {
-            friendshipBgm.pause();
-            friendshipBgm.currentTime = 52;
-        }
-    });
-
-    // STOP BGM
+    // STOP BGM WHEN BACK IS CLICKED
     function stopFriendshipBgm() {
         friendshipBgm.pause();
-        friendshipBgm.currentTime = 52;
+        friendshipBgm.currentTime = 79;
     }
 
     // OPEN SURPRISE SCREEN
@@ -194,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         messageCard.classList.remove("show");
         messageCard.style.display = "none";
+
         readMessageButton.style.display = "inline-block";
 
         surpriseContent.classList.remove("play-animations");
@@ -204,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo(0, 0);
     });
 
-    // REVEAL BIRTHDAY MESSAGE + PLAY BGM
+    // READ MY MESSAGE + START BGM
     readMessageButton.addEventListener("click", () => {
 
         messageCard.style.display = "block";
@@ -214,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageCard.classList.add("show");
         readMessageButton.style.display = "none";
 
-        // START NANBAN BGM FROM 00:52
+        // START BGM FROM 01:19
         playFriendshipBgm();
 
         setTimeout(() => {
@@ -237,10 +239,10 @@ document.addEventListener("DOMContentLoaded", () => {
         surpriseContent.style.display = "none";
         welcomeScreen.style.display = "flex";
 
-        // STOP BGM
+        // STOP BGM IMMEDIATELY
         stopFriendshipBgm();
 
-        // PAUSE VIDEOS
+        // PAUSE ALL VIDEOS
         videoGallery.querySelectorAll("video").forEach((video) => {
             video.pause();
         });
