@@ -49,7 +49,7 @@ const videoLinks = [
     "video3.mp4"
 ];
 
-// FINAL 10 PHOTO CAPTIONS
+// PHOTO CAPTIONS
 const captions = [
     "The Woman Behind His Smile 🤍",
     "💋🫂",
@@ -62,6 +62,12 @@ const captions = [
     "A Frame Full of Happiness🥹",
     "💙"
 ];
+
+// NANBAN FRIENDSHIP BGM
+const friendshipBgm = new Audio("./friendship-bgm.mp3");
+friendshipBgm.loop = true;
+friendshipBgm.volume = 0.65;
+friendshipBgm.preload = "auto";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -111,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
         img.alt = "Sudhan birthday memory";
         img.loading = "lazy";
 
-        // INDIVIDUAL PHOTO CAPTION
         const caption = document.createElement("span");
         caption.textContent = captions[index];
 
@@ -140,13 +145,38 @@ document.addEventListener("DOMContentLoaded", () => {
         videoGallery.appendChild(video);
     });
 
+    // PLAY BGM FROM 00:53
+    async function playFriendshipBgm() {
+
+        try {
+            if (friendshipBgm.readyState < 1) {
+                await new Promise((resolve, reject) => {
+                    friendshipBgm.addEventListener("loadedmetadata", resolve, { once: true });
+                    friendshipBgm.addEventListener("error", reject, { once: true });
+                    friendshipBgm.load();
+                });
+            }
+
+            friendshipBgm.currentTime = 53;
+            await friendshipBgm.play();
+
+        } catch (error) {
+            console.log("BGM playback error:", error);
+        }
+    }
+
+    // STOP BGM
+    function stopFriendshipBgm() {
+        friendshipBgm.pause();
+        friendshipBgm.currentTime = 53;
+    }
+
     // OPEN SURPRISE SCREEN
     surpriseButton.addEventListener("click", () => {
 
         welcomeScreen.style.display = "none";
         surpriseContent.style.display = "block";
 
-        // LOAD VIDEOS WHEN SURPRISE SCREEN OPENS
         videoGallery.querySelectorAll("video").forEach((video) => {
             video.load();
         });
@@ -164,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo(0, 0);
     });
 
-    // REVEAL BIRTHDAY MESSAGE
+    // REVEAL BIRTHDAY MESSAGE + PLAY BGM
     readMessageButton.addEventListener("click", () => {
 
         messageCard.style.display = "block";
@@ -173,6 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         messageCard.classList.add("show");
         readMessageButton.style.display = "none";
+
+        // START NANBAN BGM FROM 00:53
+        playFriendshipBgm();
 
         setTimeout(() => {
             messageCard.scrollIntoView({
@@ -194,6 +227,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         surpriseContent.style.display = "none";
         welcomeScreen.style.display = "flex";
+
+        // STOP BGM
+        stopFriendshipBgm();
 
         // PAUSE VIDEOS
         videoGallery.querySelectorAll("video").forEach((video) => {
