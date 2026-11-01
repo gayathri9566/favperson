@@ -48,7 +48,6 @@ const videoLinks = [
     "video2.mp4",
     "video3.mp4"
 ];
-
 document.addEventListener("DOMContentLoaded", () => {
 
     const photoWall = document.getElementById("photoWall");
