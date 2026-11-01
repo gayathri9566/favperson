@@ -51,13 +51,13 @@ const videoLinks = [
 
 const captions = [
     "The Woman Behind His Smile 🤍",
-    "Friends by Chance, Brothers by Choice 💋🫂",
-    "Little Us, Big Memories 😙",
-    "Just Him, Just Perfect 💙😋",
+    "💋🫂",
+    "Little Us😙",
+    "Just Him Just Perfect 💙😋",
     "❤️🫂",
     "His Forever Guide 💞",
     "A Picture Full of Love 🫶🏻",
-    "Better Together, Always! 😌",
+    "Better Together Always! 😌",
     "A Frame Full of Happiness🥹",
     "💙"
 ];
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         card.className = "polaroid";
 
         const img = document.createElement("img");
-        img.src = filename;
+        img.src = `./${filename}`;
         img.alt = "Birthday memory";
         img.loading = "lazy";
 
@@ -150,9 +150,10 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             friendshipBgm.pause();
 
-            // Wait until audio metadata is loaded
+            // Wait for audio metadata
             if (friendshipBgm.readyState < 1) {
                 await new Promise((resolve, reject) => {
+
                     friendshipBgm.addEventListener(
                         "loadedmetadata",
                         resolve,
@@ -161,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     friendshipBgm.addEventListener(
                         "error",
-                        reject,
+                        () => reject(friendshipBgm.error),
                         { once: true }
                     );
 
@@ -169,15 +170,46 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
 
-            friendshipBgm.currentTime = 79;
+            // Check whether the audio is long enough
+            if (friendshipBgm.duration <= 79) {
+                throw new Error("BGM duration is less than 01:19");
+            }
+
+            // Seek to 01:19 and wait for seek completion
+            await new Promise((resolve, reject) => {
+
+                const onSeeked = () => {
+                    cleanup();
+                    resolve();
+                };
+
+                const onError = () => {
+                    cleanup();
+                    reject(friendshipBgm.error);
+                };
+
+                const cleanup = () => {
+                    friendshipBgm.removeEventListener("seeked", onSeeked);
+                    friendshipBgm.removeEventListener("error", onError);
+                };
+
+                friendshipBgm.addEventListener("seeked", onSeeked);
+                friendshipBgm.addEventListener("error", onError);
+
+                friendshipBgm.currentTime = 79;
+            });
+
+            // Start playback
             await friendshipBgm.play();
 
+            console.log("Friendship BGM started at 01:19");
+
         } catch (error) {
-            console.log("BGM playback error:", error);
+            console.error("Friendship BGM error:", error);
         }
     }
 
-    // STOP BGM WHEN BACK IS CLICKED
+    // STOP BGM
     function stopFriendshipBgm() {
         friendshipBgm.pause();
         friendshipBgm.currentTime = 79;
@@ -206,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo(0, 0);
     });
 
-    // READ MY MESSAGE + START BGM
+    // READ MY MESSAGE + PLAY BGM
     readMessageButton.addEventListener("click", () => {
 
         messageCard.style.display = "block";
@@ -230,6 +262,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // BACK TO WELCOME SCREEN
     backButton.addEventListener("click", () => {
 
+        // Stop BGM immediately
+        stopFriendshipBgm();
+
         surpriseContent.classList.remove("play-animations");
 
         messageCard.classList.remove("show");
@@ -239,10 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
         surpriseContent.style.display = "none";
         welcomeScreen.style.display = "flex";
 
-        // STOP BGM IMMEDIATELY
-        stopFriendshipBgm();
-
-        // PAUSE ALL VIDEOS
+        // Pause all videos
         videoGallery.querySelectorAll("video").forEach((video) => {
             video.pause();
         });
