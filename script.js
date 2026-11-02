@@ -52,7 +52,7 @@ const videoLinks = [
 
 const captions = [
     "The Woman Behind His Smile 🤍",
-    "💋🫂",
+    "🫀🫂💋",
     "Mini version of him😙",
     "Just Him Just Perfect 💙😋",
     "❤️🫂",
